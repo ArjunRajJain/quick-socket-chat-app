@@ -15,22 +15,21 @@ app.get('/', (req, res) => {
 
 var user = rug.generate();
 
+let messages = [];
+
 app.get('/initMessages',(req,res)=> {
-  res.json({
-    messages:[
-      {msg:'first message',username:user},
-      {msg:'second message',username:user},
-      {msg:'third message',username:user},
-      {msg:'fourth message',username:user},
-      {msg:'fifth message',username:user},
-    ]
-  })
+  res.json({messages})
 })
 
 io.on('connection', (socket) => {
   socket.emit('username',rug.generate());
   //receive message from user
   socket.on('chat message', ({msg,username}) => {
+
+    //cache last 100 messages
+    if(messages.length > 100) messages.shift();
+    messages.push({msg,username})
+
     io.emit('chat message', {msg,username}); //broadcast message to user
   });
 });
