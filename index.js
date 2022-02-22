@@ -7,6 +7,7 @@ const io = new Server(server);
 var rug = require('random-username-generator');
 // rug.setName(['new name']);
 // rug.setAdjectives(['new adjective']);
+let port = process.env.PORT ? process.env.PORT : 3003;
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -35,6 +36,6 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log('listening on *:3000');
 });
